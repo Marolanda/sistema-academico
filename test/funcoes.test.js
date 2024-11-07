@@ -1,15 +1,50 @@
-require
-/**Implementação do módulo 1: Módulo de Lançamento de Notas
-(lancamentoNotas.js):
- Função lancarNota(nota1, nota2) que valida e armazena as notas de 1UP e
-2UP.
- Teste: Validação de entradas e verificação de erros para notas fora do intervalo.*/
+const { inserirNotas, calcularMedia, determinarStatus } = require('../src/funcoes'); 
 
-/*Implementação do módulo 2: Módulo de cálculo de médias (calcularMedia.js)
- Função calcularMedia(nota1, nota2) que recebe as notas validadas e
-calcula a média.
- Teste: Cálculo correto da média com base em diferentes valores de nota. */
+// Testes para a função inserirNotas
+describe('inserirNotas', () => {
+    test('deve retornar um objeto com UP1 e UP2 válidos', () => {
+        const notas = inserirNotas(8.5, 7.0);
+        expect(notas).toEqual({ UP1: 8.5, UP2: 7.0 });
+    });
 
-/*Implementação do módulo 3: Módulo de status do aluno (exibirStatus.js)
- Função obterStatus(media) que retorna o status do aluno com base na média.
- Teste: Verificação de status com base em diferentes médias. */
+    test('deve lançar um erro para notas fora do intervalo 0.0 e 10.0', () => {
+        expect(() => inserirNotas(11, 5.0)).toThrow("As notas devem ser números decimais entre 0.0 e 10.0, com uma casa decimal.");
+    });
+
+    test('deve lançar um erro para notas com mais de uma casa decimal', () => {
+        expect(() => inserirNotas(8.55, 7.0)).toThrow("As notas devem ser números decimais entre 0.0 e 10.0, com uma casa decimal.");
+    });
+});
+
+// Testes para a função calcularMedia
+describe('calcularMedia', () => {
+    test('deve calcular a média corretamente para notas válidas', () => {
+        const notas = inserirNotas(8.5, 7.0);
+        const media = calcularMedia(notas);
+        expect(media).toBe(7.8); // Média arredondada para uma casa decimal
+    });
+});
+
+// Testes para a função determinarStatus
+describe('determinarStatus', () => {
+    const notasAprovado = inserirNotas(8.5, 7.0);
+    const mediaAprovado = calcularMedia(notasAprovado);
+
+    const notasReprovado = inserirNotas(4.5, 3.0);
+    const mediaReprovado = calcularMedia(notasReprovado);
+
+    const notasFinal = inserirNotas(6.0, 5.0);
+    const mediaFinal = calcularMedia(notasFinal);
+
+    test('deve retornar "Reprovado por média" para média menor que 4.0', () => {
+        expect(determinarStatus(mediaReprovado)).toBe("Reprovado por média");
+    });
+
+    test('deve retornar "Aprovado por média" para média maior ou igual a 6.0', () => {
+        expect(determinarStatus(mediaAprovado)).toBe("Aprovado por média");
+    });
+
+    test('deve retornar "Aguardando a final" para média entre 4.0 e 6.0 (exclusivo 6.0)', () => {
+        expect(determinarStatus(mediaFinal)).toBe("Aguardando a final");
+    });
+});

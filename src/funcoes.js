@@ -1,23 +1,36 @@
-/*1º Módulo: Lançamento de notas pelo professor
- Será de responsabilidade de um desenvolvedor
- O professor insere as notas de 1UP e 2UP, que devem ser números decimais entre
-0.0 e 10.0, com uma única casa decimal.
-*/
+// Função do 1º Módulo: Lançamento de notas pelo professor
+function inserirNotas(UP1, UP2) {
+    if (
+        typeof UP1 !== "number" || typeof UP2 !== "number" ||
+        UP1 < 0.0 || UP1 > 10.0 || UP2 < 0.0 || UP2 > 10.0 ||
+        !Number.isInteger(UP1 * 10) || !Number.isInteger(UP2 * 10)
+    ) {
+        throw new Error("As notas devem ser números decimais entre 0.0 e 10.0, com uma casa decimal.");
+    }
+    return { UP1, UP2 };
+}
 
-/*2º Módulo: Cálculo da média
- Será de responsabilidade de um segundo desenvolvedor.
- Com base nas notas de 1UP e 2UP, a média do aluno é calculada usando a
-fórmula: 𝑚𝑒𝑑𝑖𝑎 = (1𝑈𝑃 + 2𝑈𝑃)/2
- A média calculada deve ser um número entre 0.0 e 10.0. */
+// Função do 2º Módulo: Cálculo da média
+function calcularMedia(inserirNotas) {
+    const { UP1, UP2 } = inserirNotas;
+    const media = (UP1 + UP2) / 2;
+    return parseFloat(media.toFixed(1)); // Limita a uma casa decimal
+}
 
-/*3º módulo: Status do aluno
- Com base na média calculada, o status do aluno é determinado de acordo com a
-seguinte regra de negócio:
-o Média < 4.0: "Reprovado por média"
-o Média >= 6.0: "Aprovado por média"
-o Média entre 4.0 e 6.0 (inclusivo 4.0 e exclusivo 6.0): "Aguardando a final"
- O resultado deve ser exibido como uma mensagem formatada, contendo o status
-do aluno. */
+// Função do 3º Módulo: Status do aluno
+function determinarStatus(calcularMedia) {
+    const media = calcularMedia;
+    if (media < 4.0) {
+        return "Reprovado por média";
+    } else if (media >= 6.0) {
+        return "Aprovado por média";
+    } else {
+        return "Aguardando a final";
+    }
+}
 
-
-module.exports
+module.exports = {
+    inserirNotas,
+    calcularMedia,
+    determinarStatus
+};
