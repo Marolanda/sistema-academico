@@ -16,16 +16,15 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          python-version: '3.13.0' 
+          node-version: '16'  
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          npm install  
 
       - name: Run tests
         run: |
-          pytest
+          npm test  
